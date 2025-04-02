@@ -1,7 +1,5 @@
 import {createInterface} from 'readline';
 import { createReadStream }  from 'fs';
-import { join }  from 'path';
-import * as vscode from 'vscode';
 
 
 export type CssParseRes = {
@@ -10,7 +8,7 @@ export type CssParseRes = {
   cssDetails: Map<string, string>;
 }
 
-const getCssParse = (path: string = './variable.scss'): Promise<CssParseRes> => {
+const getCssParse = (path: string): Promise<CssParseRes> => {
 
   const parseRes: CssParseRes = {
     cssVarNames: new Set(),
@@ -19,7 +17,7 @@ const getCssParse = (path: string = './variable.scss'): Promise<CssParseRes> => 
   };
 
   const rl = createInterface({
-    input: createReadStream(join(vscode.workspace.rootPath as string, path)),
+    input: createReadStream(path),
     output: process.stdout,
     terminal: false
   });
@@ -31,7 +29,7 @@ const getCssParse = (path: string = './variable.scss'): Promise<CssParseRes> => 
       if (cssVars.length === 2) {
         const cssVarName = cssVars[0].trim();
         parseRes.cssVarNames.add(cssVarName);
-        parseRes.cssVarTriggers.add(cssVarName.slice(0, 2));
+        parseRes.cssVarTriggers.add(cssVarName.slice(0, 1));
         parseRes.cssDetails.set(cssVarName, trimLine);
       }
     }

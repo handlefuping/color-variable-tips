@@ -3,7 +3,7 @@
   "displayName": "color-variable-tips",
   "description": "tips for color variable",
   "publisher": "handlefuping",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.98.0"
   },
@@ -16,23 +16,22 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-        "type": "object",
-        "title": "color variable path configuration",
-        "properties": {
-            "colorvariabletips.enable": {
-                "type": "boolean",
-                "default": true,
-                "description": "Enable or disable this extension."
-            },
-            "colorvariabletips.path": {
-                "type": "string",
-                "default": "src/styles/theme/color.scss",
-                "description": "path relative to workspace root."
-            }
-            
+      "type": "object",
+      "title": "color variable path configuration",
+      "properties": {
+        "colorvariabletips.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable this extension."
+        },
+        "colorvariabletips.path": {
+          "type": "string",
+          "default": "src/styles/theme/color.scss",
+          "description": "path relative to workspace root."
         }
+      }
     }
-},
+  },
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",

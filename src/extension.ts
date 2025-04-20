@@ -7,7 +7,7 @@ let completionProvider: vscode.Disposable | null = null;
 
 export  async function  activate(context: vscode.ExtensionContext) {
 	
-	const {enable, path} = vscode.workspace.getConfiguration(name);
+	const {enable, path, selector} = vscode.workspace.getConfiguration(name);
 	if (!enable) {
 		return;
 	}
@@ -28,7 +28,7 @@ export  async function  activate(context: vscode.ExtensionContext) {
 		return;
 	}
 	completionProvider = vscode.languages.registerCompletionItemProvider(
-		"html,css,javascript,typescript,less,sass,scss,vue,jsx,tsx".split(','),
+		selector,
 		 {
 				provideCompletionItems(
 					model: vscode.TextDocument,

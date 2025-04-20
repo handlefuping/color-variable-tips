@@ -7,6 +7,7 @@
   "engines": {
     "vscode": "^1.98.0"
   },
+  "icon": "./icon.png",
   "categories": [
     "Other"
   ],
@@ -28,6 +29,11 @@
           "type": "string",
           "default": "src/styles/theme/color.scss",
           "description": "Path relative to workspace root."
+        },
+        "colorvariabletips.selector": {
+          "type": "array",
+          "default": ["html","css","less","sass","scss","vue","jsx","tsx"],
+          "description": "Defines the documents for which this provider is applicable."
         }
       }
     }
@@ -36,7 +42,7 @@
     "vscode:prepublish": "npm version patch && npm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
+    "package": "webpack --mode production --devtool hidden-source-map && cp icon.png dist/",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",

@@ -1,45 +1,46 @@
-import {createInterface} from 'readline';
-import { createReadStream }  from 'fs';
+import { createInterface } from 'readline';
+import { createReadStream } from 'fs';
+
+export const cssVarTriggers = ['--', '$'];
+
+export type CssType = "var" | "sass"
+
+export type CssParseRes = Map<CssType, Map<string, Set<string>>>
 
 
-export type CssParseRes = {
-  cssVarNames: Set<string>;
-  cssVarTriggers: Set<string>;
-  cssDetails: Map<string, string>;
-}
 
-const getCssParse = (path: string): Promise<CssParseRes> => {
-
-  const parseRes: CssParseRes = {
-    cssVarNames: new Set(),
-    cssVarTriggers: new Set(),
-    cssDetails: new Map()
-  };
-
-  const rl = createInterface({
-    input: createReadStream(path),
-    output: process.stdout,
-    terminal: false
-  });
-  
-  rl.on('line', (line: string) => {
-    const trimLine = line.trim();
-    if (!trimLine.startsWith('/')) {
-      const cssVars = trimLine.split(':');
-      if (cssVars.length === 2) {
-        const cssVarName = cssVars[0].trim();
-        parseRes.cssVarNames.add(cssVarName);
-        parseRes.cssVarTriggers.add(cssVarName.slice(0, 1));
-        parseRes.cssDetails.set(cssVarName, trimLine);
-      }
+const parseRes: CssParseRes = new Map();
+const setParseRes = (type: CssType, cssVarName: string, trimLine: string) => {
+  if (!parseRes.has(type)) {
+    parseRes.set(type, new Map());
+  }
+  parseRes.get(type)?.set(cssVarName, new Set([cssVarName, trimLine]));
+};
+const handleLine = (line: string) => {
+  const cssVars = line.split(':');
+  if (cssVars.length === 2) {
+    const cssVarName = cssVars[0].trim();
+    if (cssVarName.startsWith('--')) {
+      setParseRes('var', cssVarName, line);
     }
-  });
+    if (cssVarName.startsWith('$')) {
+      setParseRes('sass', cssVarName, line);
+    }
 
-  return new Promise((resolve, reject) => {
-    rl.on('close', () => {
-      resolve(parseRes);
-    });
+  }
+};
+const readFileLineByLine = async (path: string, handleLine: (line: string) => void) => {
+  const rt = createInterface({
+    input: createReadStream(path),
   });
+  for await (const line of rt) {
+    handleLine(line);
+  }
+};
+
+const getCssParse = async (paths: string[]): Promise<CssParseRes> => {
+  await Promise.all(paths.map(path => readFileLineByLine(path, handleLine)));
+  return parseRes;
 };
 
 export default getCssParse;

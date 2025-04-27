@@ -12,10 +12,11 @@
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    
     "configuration": {
       "type": "object",
       "title": "color variable path configuration",
@@ -26,9 +27,9 @@
           "description": "Enable or disable this extension."
         },
         "colorvariabletips.path": {
-          "type": "string",
-          "default": "src/styles/theme/color.scss",
-          "description": "Path relative to workspace root."
+          "type": "array",
+          "default": ["src/styles/theme/color.scss"],
+          "description": "Paths relative to workspace root."
         },
         "colorvariabletips.selector": {
           "type": "array",
@@ -61,7 +62,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
-    "@types/vscode": "^1.98.0",
+    "@types/vscode": "^1.99.1",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.25.0",
     "@vscode/test-cli": "^0.0.10",
@@ -71,8 +72,5 @@
     "typescript": "^5.7.3",
     "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1"
-  },
-  "dependencies": {
-    "css-parser": "^0.0.6"
   }
 }

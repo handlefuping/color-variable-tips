@@ -1,6 +1,8 @@
 # theme-color README
 
-you can type `$` to get the color variables tips
+you can type `$` or `-` to get the css variables(sass/less/css var) tips
+
+note: in certain scenarios, typing `-` do not trigger.
 
 // Enable or disable this extension.
 
